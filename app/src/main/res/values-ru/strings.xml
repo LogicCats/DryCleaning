@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Моё приложение</string>
+
+    <string name="title_create_order">Создать заказ</string>
+    <string name="cd_photo">Фото заказа</string>
+    <string name="cd_remove_photo">Удалить фото</string>
+    <string name="cd_add_photo">Добавить фото</string>
+    <string name="label_services">Услуги</string>
+    <string name="service_jacket">Пиджак</string>
+    <string name="service_pants">Брюки</string>
+    <string name="service_shirt">Рубашка</string>
+    <string name="service_custom">Услуга %1$d</string>
+    <string name="label_date_time">Дата и время</string>
+    <string name="cd_pick_date">Выбрать дату и время</string>
+    <string name="label_address">Адрес</string>
+    <string name="label_promo">Промокод</string>
+    <string name="text_total">Итого: %1$s ₽</string>
+    <string name="btn_pay">Оплатить</string>
+    <string name="toast_order_id">ID заказа: %1$s</string>
+
+    <string name="login_title">Вход</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Пароль</string>
+    <string name="btn_login">Войти</string>
+    <string name="btn_register">Регистрация</string>
+
+    <string name="cd_email">Иконка почты</string>
+    <string name="cd_password">Иконка пароля</string>
+    <string name="cd_show_password">Показать пароль</string>
+    <string name="cd_hide_password">Скрыть пароль</string>
+
+    <!-- Элементы меню -->
+    <string name="nav_catalog">Каталог услуг</string>
+    <string name="nav_create_order">Создать заказ</string>
+    <string name="nav_search_orders">Поиск заказов</string>
+    <string name="nav_settings">Настройки</string>
+
+    <!-- Подписи для accessibility -->
+    <string name="cd_menu">Открыть меню</string>
+    <string name="cd_profile">Профиль</string>
+    <string name="cd_logout">Выйти</string>
+    <string name="cd_create_order">Создать заказ</string>
+
+    <!-- Основной экран -->
+    <string name="welcome_message">Добро пожаловать в химчистку!</string>
+    <string name="catalog_placeholder">Здесь будет каталог услуг химчистки.</string>
+
+    <string name="details_title">Детали заказа</string>
+    <string name="cd_back">Назад</string>
+
+    <string name="details_id">ID: %1$s</string>
+    <string name="details_created">Создан: %1$s</string>
+    <string name="details_address">Адрес: %1$s</string>
+    <string name="details_scheduled">Запланировано на: %1$s</string>
+    <string name="details_promo">Промокод: %1$s</string>
+    <string name="details_total">Итоговая сумма: %1$s ₽</string>
+
+    <string name="cd_order_photo">Фото заказа</string>
+
+    <string name="order_list_title">Все заказы</string>
+    <string name="order_list_id">ID: %1$s</string>
+    <string name="order_list_created">Дата создания: %1$s</string>
+    <string name="order_list_total">Сумма: %1$s ₽</string>
+
+    <string name="profile_title">Профиль</string>
+
+    <string name="profile_name">Имя: %1$s</string>
+    <string name="profile_email">Email: %1$s</string>
+    <string name="profile_phone">Телефон: %1$s</string>
+
+    <string name="registration_title">Регистрация</string>
+    <string name="label_name">Имя</string>
+    <string name="label_phone">Телефон</string>
+    <string name="label_confirm_password">Подтвердите пароль</string>
+
+    <string name="error_password_mismatch">Пароли не совпадают</string>
+
+    <string name="btn_back">Назад</string>
+
+    <string name="cd_name">Иконка имени</string>
+    <string name="cd_phone">Иконка телефона</string>
+    <string name="cd_confirm_password">Иконка подтверждения пароля</string>
+
+    <string name="label_search_orders">Поиск заказов</string>
+    <string name="placeholder_enter_order">Введите номер или имя заказа</string>
+    <string name="cd_clear">Очистить</string>
+    <string name="label_search_history">История поиска</string>
+    <string name="btn_clear_history">Очистить историю</string>
+    <string name="btn_retry">Обновить</string>
+    <string name="text_no_results">Нет результатов</string>
+    <string name="text_order_id">ID: %1$s</string>
+    <string name="text_order_date">Дата: %1$s</string>
+    <string name="text_order_total">Сумма: %1$s ₽</string>
+
+    <string name="options">Настройки</string>
+    <string name="back">Назад</string>
+    <string name="theme">Тема приложения</string>
+    <string name="theme_system">Системная</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Тёмная</string>
+    <string name="language">Язык приложения</string>
+    <string name="language_system">Системный (%1$s)</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_english">Английский</string>
+    <string name="language_spanish">Испанский</string>
+    <string name="language_chinese">Китайский</string>
+    <string name="advanced">Дополнительно</string>
+    <string name="push_notifications">Пуш-уведомления</string>
+    <string name="analytics_collection">Сбор аналитики</string>
+    <string name="about_app">О приложении</string>
+    <string name="version">Версия: %1$s</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+
+    <string name="promo_code_label">Промокод: %1$s</string>
+    <string name="promotions_header">Акции и промокоды</string>
+
+    <!-- Текст ошибки при неверном промокоде -->
+    <string name="error_invalid_promo">Неверный промокод</string>
+
+    <!-- strings.xml -->
+    <string name="notification_channel_name">Уведомления о заказах</string>
+    <string name="notification_channel_desc">Уведомления о запланированных заказах</string>
+    <string name="notification_title">Напоминание о предстоящем заказе</string>
+    <string name="notification_text">У вас сейчас запланирован заказ. Идентификатор заказа: %1$s</string>
+
+</resources>

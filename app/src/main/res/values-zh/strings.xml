@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">我的应用</string>
+
+    <string name="title_create_order">创建订单</string>
+    <string name="cd_photo">订单照片</string>
+    <string name="cd_remove_photo">删除照片</string>
+    <string name="cd_add_photo">添加照片</string>
+    <string name="label_services">服务</string>
+    <string name="service_jacket">夹克</string>
+    <string name="service_pants">裤子</string>
+    <string name="service_shirt">衬衫</string>
+    <string name="service_custom">服务 %1$d</string>
+    <string name="label_date_time">日期和时间</string>
+    <string name="cd_pick_date">选择日期和时间</string>
+    <string name="label_address">地址</string>
+    <string name="label_promo">优惠码</string>
+    <string name="text_total">总计：%1$s ₽</string>
+    <string name="btn_pay">付款</string>
+    <string name="toast_order_id">订单 ID：%1$s</string>
+
+    <string name="login_title">登录</string>
+    <string name="label_email">电子邮件</string>
+    <string name="label_password">密码</string>
+    <string name="btn_login">登录</string>
+    <string name="btn_register">注册</string>
+
+    <string name="cd_email">电子邮件 图标</string>
+    <string name="cd_password">密码 图标</string>
+    <string name="cd_show_password">显示密码</string>
+    <string name="cd_hide_password">隐藏密码</string>
+
+    <!-- 菜单项 -->
+    <string name="nav_catalog">服务目录</string>
+    <string name="nav_create_order">创建订单</string>
+    <string name="nav_search_orders">搜索订单</string>
+    <string name="nav_settings">设置</string>
+
+    <!-- 辅助说明 -->
+    <string name="cd_menu">打开菜单</string>
+    <string name="cd_profile">个人资料</string>
+    <string name="cd_logout">注销</string>
+    <string name="cd_create_order">创建订单</string>
+
+    <!-- 主屏内容 -->
+    <string name="welcome_message">欢迎使用干洗店！</string>
+    <string name="catalog_placeholder">此处将显示服务目录。</string>
+
+    <string name="details_title">订单详情</string>
+    <string name="cd_back">返回</string>
+
+    <string name="details_id">编号：%1$s</string>
+    <string name="details_created">创建时间：%1$s</string>
+    <string name="details_address">地址：%1$s</string>
+    <string name="details_scheduled">计划时间：%1$s</string>
+    <string name="details_promo">优惠码：%1$s</string>
+    <string name="details_total">合计：%1$s ₽</string>
+
+    <string name="cd_order_photo">订单照片</string>
+
+    <string name="order_list_title">所有订单</string>
+    <string name="order_list_id">编号：%1$s</string>
+    <string name="order_list_created">创建时间：%1$s</string>
+    <string name="order_list_total">总计：%1$s ₽</string>
+
+    <string name="profile_title">个人资料</string>
+
+    <string name="profile_name">姓名：%1$s</string>
+    <string name="profile_email">电子邮件：%1$s</string>
+    <string name="profile_phone">电话：%1$s</string>
+
+    <string name="registration_title">注册</string>
+    <string name="label_name">姓名</string>
+    <string name="label_phone">电话</string>
+    <string name="label_confirm_password">确认密码</string>
+
+    <string name="error_password_mismatch">密码不匹配</string>
+
+    <string name="btn_back">返回</string>
+
+    <string name="cd_name">姓名 图标</string>
+    <string name="cd_phone">电话 图标</string>
+    <string name="cd_confirm_password">确认密码 图标</string>
+
+    <string name="label_search_orders">搜索订单</string>
+    <string name="placeholder_enter_order">输入订单号或名称</string>
+    <string name="cd_clear">清除</string>
+    <string name="label_search_history">搜索历史</string>
+    <string name="btn_clear_history">清除历史</string>
+    <string name="btn_retry">重试</string>
+    <string name="text_no_results">未找到结果</string>
+    <string name="text_order_id">ID: %1$s</string>
+    <string name="text_order_date">日期: %1$s</string>
+    <string name="text_order_total">金额: %1$s ₽</string>
+
+    <string name="options">设置</string>
+    <string name="back">返回</string>
+    <string name="theme">应用主题</string>
+    <string name="theme_system">系统</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+    <string name="language">语言</string>
+    <string name="language_system">系统（%1$s）</string>
+    <string name="language_russian">俄语</string>
+    <string name="language_english">英语</string>
+    <string name="language_spanish">西班牙语</string>
+    <string name="language_chinese">中文</string>
+    <string name="advanced">高级</string>
+    <string name="push_notifications">推送通知</string>
+    <string name="analytics_collection">数据分析收集</string>
+    <string name="about_app">关于应用</string>
+    <string name="version">版本：%1$s</string>
+    <string name="privacy_policy">隐私政策</string>
+
+    <string name="promo_code_label">促销代码: %1$s</string>
+    <string name="promotions_header">促销和促销代码</string>
+
+    <!-- Текст ошибки при неверном промокоде -->
+    <string name="error_invalid_promo">促销代码无效</string>
+
+    <!-- strings.xml -->
+    <string name="notification_channel_name">订单通知</string>
+    <string name="notification_channel_desc">关于已安排订单的通知</string>
+    <string name="notification_title">即将下单的订单提醒</string>
+    <string name="notification_text">您现在有一个已安排的订单。订单 ID：%1$s</string>
+
+</resources>

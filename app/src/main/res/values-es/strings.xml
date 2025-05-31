@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mi aplicación</string>
+
+    <string name="title_create_order">Crear pedido</string>
+    <string name="cd_photo">Foto del pedido</string>
+    <string name="cd_remove_photo">Eliminar foto</string>
+    <string name="cd_add_photo">Agregar foto</string>
+    <string name="label_services">Servicios</string>
+    <string name="service_jacket">Chaqueta</string>
+    <string name="service_pants">Pantalones</string>
+    <string name="service_shirt">Camisa</string>
+    <string name="service_custom">Servicio %1$d</string>
+    <string name="label_date_time">Fecha y hora</string>
+    <string name="cd_pick_date">Seleccionar fecha y hora</string>
+    <string name="label_address">Dirección</string>
+    <string name="label_promo">Código promo</string>
+    <string name="text_total">Total: %1$s ₽</string>
+    <string name="btn_pay">Pagar</string>
+    <string name="toast_order_id">ID de pedido: %1$s</string>
+
+    <string name="login_title">Iniciar sesión</string>
+    <string name="label_email">Correo electrónico</string>
+    <string name="label_password">Contraseña</string>
+    <string name="btn_login">Ingresar</string>
+    <string name="btn_register">Registrarse</string>
+
+    <string name="cd_email">Icono de correo</string>
+    <string name="cd_password">Icono de contraseña</string>
+    <string name="cd_show_password">Mostrar contraseña</string>
+    <string name="cd_hide_password">Ocultar contraseña</string>
+
+    <!-- Elementos del menú -->
+    <string name="nav_catalog">Catálogo de servicios</string>
+    <string name="nav_create_order">Crear pedido</string>
+    <string name="nav_search_orders">Buscar pedidos</string>
+    <string name="nav_settings">Configuración</string>
+
+    <!-- Descripciones para accesibilidad -->
+    <string name="cd_menu">Abrir menú</string>
+    <string name="cd_profile">Perfil</string>
+    <string name="cd_logout">Cerrar sesión</string>
+    <string name="cd_create_order">Crear pedido</string>
+
+    <!-- Pantalla principal -->
+    <string name="welcome_message">¡Bienvenido a la tintorería!</string>
+    <string name="catalog_placeholder">Aquí estará el catálogo de servicios.</string>
+
+    <string name="details_title">Detalles del pedido</string>
+    <string name="cd_back">Atrás</string>
+
+    <string name="details_id">ID: %1$s</string>
+    <string name="details_created">Creado: %1$s</string>
+    <string name="details_address">Dirección: %1$s</string>
+    <string name="details_scheduled">Programado: %1$s</string>
+    <string name="details_promo">Código promo: %1$s</string>
+    <string name="details_total">Total: %1$s ₽</string>
+
+    <string name="cd_order_photo">Foto del pedido</string>
+
+    <string name="order_list_title">Todos los pedidos</string>
+    <string name="order_list_id">ID: %1$s</string>
+    <string name="order_list_created">Creado: %1$s</string>
+    <string name="order_list_total">Total: %1$s ₽</string>
+
+    <string name="profile_title">Perfil</string>
+
+    <string name="profile_name">Nombre: %1$s</string>
+    <string name="profile_email">Correo: %1$s</string>
+    <string name="profile_phone">Teléfono: %1$s</string>
+
+    <string name="registration_title">Registro</string>
+    <string name="label_name">Nombre</string>
+    <string name="label_phone">Teléfono</string>
+    <string name="label_confirm_password">Confirmar contraseña</string>
+
+    <string name="error_password_mismatch">Las contraseñas no coinciden</string>
+
+    <string name="btn_back">Atrás</string>
+
+    <string name="cd_name">Icono de nombre</string>
+    <string name="cd_phone">Icono de teléfono</string>
+    <string name="cd_confirm_password">Icono de confirmar contraseña</string>
+    <string name="label_search_orders">Buscar pedidos</string>
+    <string name="placeholder_enter_order">Introduzca el número o nombre del pedido</string>
+    <string name="cd_clear">Borrar</string>
+    <string name="label_search_history">Historial de búsqueda</string>
+    <string name="btn_clear_history">Borrar historial</string>
+    <string name="btn_retry">Reintentar</string>
+    <string name="text_no_results">No se encontraron resultados</string>
+    <string name="text_order_id">ID: %1$s</string>
+    <string name="text_order_date">Fecha: %1$s</string>
+    <string name="text_order_total">Total: %1$s ₽</string>
+
+    <string name="options">Opciones</string>
+    <string name="back">Atrás</string>
+    <string name="theme">Tema de la aplicación</string>
+    <string name="theme_system">Sistema</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Oscuro</string>
+    <string name="language">Idioma</string>
+    <string name="language_system">Sistema (%1$s)</string>
+    <string name="language_russian">Ruso</string>
+    <string name="language_english">Inglés</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_chinese">Chino</string>
+    <string name="advanced">Avanzado</string>
+    <string name="push_notifications">Notificaciones push</string>
+    <string name="analytics_collection">Recopilación de análisis</string>
+    <string name="about_app">Sobre la aplicación</string>
+    <string name="version">Versión: %1$s</string>
+    <string name="privacy_policy">Política de privacidad</string>
+
+    <string name="promo_code_label">Código promocional: %1$s</string>
+    <string name="promotions_header">Promociones y códigos promocionales</string>
+
+    <!-- Текст ошибки при неверном промокоде -->
+    <string name="error_invalid_promo">Código promocional no válido</string>
+
+    <!-- strings.xml -->
+    <string name="notification_channel_name">Notificaciones de pedidos</string>
+    <string name="notification_channel_desc">Notificaciones sobre pedidos programados</string>
+    <string name="notification_title">Recordatorio de próximo pedido</string>
+    <string name="notification_text">Tiene un pedido programado. ID del pedido: %1$s</string>
+
+</resources>

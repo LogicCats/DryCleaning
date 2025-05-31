@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Application</string>
+
+    <string name="title_create_order">Create Order</string>
+    <string name="cd_photo">Order photo</string>
+    <string name="cd_remove_photo">Remove photo</string>
+    <string name="cd_add_photo">Add photo</string>
+    <string name="label_services">Services</string>
+    <string name="service_jacket">Jacket</string>
+    <string name="service_pants">Pants</string>
+    <string name="service_shirt">Shirt</string>
+    <string name="service_custom">Service %1$d</string>
+    <string name="label_date_time">Date &amp; Time</string>
+    <string name="cd_pick_date">Pick date and time</string>
+    <string name="label_address">Address</string>
+    <string name="label_promo">Promo code</string>
+    <string name="text_total">Total: %1$s ₽</string>
+    <string name="btn_pay">Pay</string>
+    <string name="toast_order_id">Order ID: %1$s</string>
+
+    <string name="login_title">Login</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+    <string name="btn_login">Log In</string>
+    <string name="btn_register">Register</string>
+
+    <string name="cd_email">Email icon</string>
+    <string name="cd_password">Password icon</string>
+    <string name="cd_show_password">Show password</string>
+    <string name="cd_hide_password">Hide password</string>
+
+    <!-- Navigation Drawer items -->
+    <string name="nav_catalog">Service Catalog</string>
+    <string name="nav_create_order">Create Order</string>
+    <string name="nav_search_orders">Search Orders</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_menu">Open menu</string>
+    <string name="cd_profile">Profile</string>
+    <string name="cd_logout">Log out</string>
+    <string name="cd_create_order">Create order</string>
+
+    <!-- Main content texts -->
+    <string name="welcome_message">Welcome to the dry cleaner!</string>
+    <string name="catalog_placeholder">Here will be the list of services.</string>
+
+    <string name="details_title">Order Details</string>
+    <string name="cd_back">Back</string>
+
+    <string name="details_id">ID: %1$s</string>
+    <string name="details_created">Created: %1$s</string>
+    <string name="details_address">Address: %1$s</string>
+    <string name="details_scheduled">Scheduled: %1$s</string>
+    <string name="details_promo">Promo code: %1$s</string>
+    <string name="details_total">Total: %1$s ₽</string>
+
+    <string name="cd_order_photo">Order photo</string>
+
+    <string name="order_list_title">All Orders</string>
+    <string name="order_list_id">ID: %1$s</string>
+    <string name="order_list_created">Created: %1$s</string>
+    <string name="order_list_total">Total: %1$s ₽</string>
+
+    <string name="profile_title">Profile</string>
+
+    <string name="profile_name">Name: %1$s</string>
+    <string name="profile_email">Email: %1$s</string>
+    <string name="profile_phone">Phone: %1$s</string>
+
+    <string name="registration_title">Registration</string>
+    <string name="label_name">Name</string>
+    <string name="label_phone">Phone</string>
+    <string name="label_confirm_password">Confirm Password</string>
+
+    <string name="error_password_mismatch">Passwords do not match</string>
+
+    <string name="btn_back">Back</string>
+
+    <string name="cd_name">Name icon</string>
+    <string name="cd_phone">Phone icon</string>
+    <string name="cd_confirm_password">Confirm password icon</string>
+
+    <string name="label_search_orders">Search Orders</string>
+    <string name="placeholder_enter_order">Enter order number or name</string>
+    <string name="cd_clear">Clear</string>
+    <string name="label_search_history">Search History</string>
+    <string name="btn_clear_history">Clear History</string>
+    <string name="btn_retry">Retry</string>
+    <string name="text_no_results">No results found</string>
+    <string name="text_order_id">ID: %1$s</string>
+    <string name="text_order_date">Date: %1$s</string>
+    <string name="text_order_total">Total: %1$s ₽</string>
+
+    <string name="options">Options</string>
+    <string name="back">Back</string>
+    <string name="theme">App Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="language">Language</string>
+    <string name="language_system">System (%1$s)</string>
+    <string name="language_russian">Russian</string>
+    <string name="language_english">English</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_chinese">Chinese</string>
+    <string name="advanced">Advanced</string>
+    <string name="push_notifications">Push notifications</string>
+    <string name="analytics_collection">Analytics collection</string>
+    <string name="about_app">About the app</string>
+    <string name="version">Version: %1$s</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+    <string name="promo_code_label">Promo code: %1$s</string>
+    <string name="promotions_header">Promotions and promo codes</string>
+
+    <!-- Текст ошибки при неверном промокоде -->
+    <string name="error_invalid_promo">Invalid promocode</string>
+
+    <!-- strings.xml -->
+    <string name="notification_channel_name">Order Notifications</string>
+    <string name="notification_channel_desc">Notifications about scheduled orders</string>
+    <string name="notification_title">Upcoming Order Reminder</string>
+    <string name="notification_text">You have an order scheduled now. Order ID: %1$s</string>
+
+
+</resources>
