@@ -19,12 +19,18 @@ fun ProfileScreen(
     authViewModel: AuthViewModel,
     onBack: () -> Unit
 ) {
-    Log.d("ComposeLog", "ProfileScreen recomposed")
     val nameState by authViewModel.name.collectAsState(initial = "")
     val emailState by authViewModel.email.collectAsState(initial = "")
     val phoneState by authViewModel.phone.collectAsState(initial = "")
     val errorState by authViewModel.errorMessage.collectAsState(initial = "")
     val isLoading by authViewModel.isProfileLoading.collectAsState(initial = false)
+
+    // Состояния для диалога редактирования
+    var showEditDialog by remember { mutableStateOf(false) }
+    var editedName by remember { mutableStateOf("") }
+    var editedPhone by remember { mutableStateOf("") }
+    var updateError by remember { mutableStateOf("") }
+
 
     LaunchedEffect(Unit) {
         authViewModel.fetchProfile()
@@ -81,29 +87,74 @@ fun ProfileScreen(
                 }
                 else -> {
                     Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = stringResource(R.string.profile_name, nameState),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                    Text(text = stringResource(R.string.profile_name, nameState))
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = stringResource(R.string.profile_email, emailState),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                    Text(text = stringResource(R.string.profile_email, emailState))
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = stringResource(R.string.profile_phone, phoneState),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                    Text(text = stringResource(R.string.profile_phone, phoneState))
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Button(onClick = {
-                        // TODO: Навигация или диалог для редактирования
+                        // При открытии диалога подставим текущие значения
+                        editedName = nameState
+                        editedPhone = phoneState
+                        showEditDialog = true
                     }) {
                         Text(text = stringResource(R.string.btn_edit_profile))
                     }
                 }
             }
         }
+    }
+
+    // Диалог редактирования
+    if (showEditDialog) {
+        AlertDialog(
+            onDismissRequest = { showEditDialog = false },
+            title = { Text(text = stringResource(R.string.edit_profile)) },
+            text = {
+                Column {
+                    OutlinedTextField(
+                        value = editedName,
+                        onValueChange = { editedName = it },
+                        label = { Text(text = stringResource(R.string.label_name)) }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = editedPhone,
+                        onValueChange = { editedPhone = it },
+                        label = { Text(text = stringResource(R.string.label_phone)) }
+                    )
+                    if (updateError.isNotEmpty()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = updateError,
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
+            }
+            ,
+            confirmButton = {
+                TextButton(onClick = {
+                    authViewModel.updateProfile(editedName, editedPhone) { success ->
+                        if (success) {
+                            showEditDialog = false
+                            updateError = ""
+                        } else {
+                            updateError = "Не удалось обновить профиль. Попробуйте позже."
+                        }
+                    }
+                }) {
+                    Text(stringResource(R.string.btn_save))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEditDialog = false }) {
+                    Text(stringResource(R.string.btn_cancel))
+                }
+            }
+        )
     }
 }

@@ -135,5 +135,9 @@
 
     <string name="loading_promotions">Loading promotions...</string>
 
+    <string name="edit_profile">Edit profile</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
+
 
 </resources>

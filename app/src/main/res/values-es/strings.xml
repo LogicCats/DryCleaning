@@ -134,6 +134,10 @@
 
     <string name="loading_promotions">Cargando promociones...</string>
 
+    <string name="edit_profile">Editar perfil</string>
+    <string name="btn_save">Guardar</string>
+    <string name="btn_cancel">Cancelar</string>
+
 
 
 </resources>

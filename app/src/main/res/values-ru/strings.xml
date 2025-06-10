@@ -135,5 +135,9 @@
 
     <string name="loading_promotions">Загрузка акций...</string>
 
+    <string name="edit_profile">Редактировать профиль</string>
+    <string name="btn_save">Сохранить</string>
+    <string name="btn_cancel">Отмена</string>
+
 
 </resources>
