@@ -144,5 +144,7 @@ We respect your privacy. The application does not collect personal data without 
 </string>
     <string name="ok">ОК</string>
 
+    <string name="search_order_hint">Search by order number</string>
+
 
 </resources>

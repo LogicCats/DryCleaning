@@ -144,4 +144,6 @@
 </string>
     <string name="ok">OK</string>
 
+    <string name="search_order_hint">按订单号搜索</string>
+
 </resources>

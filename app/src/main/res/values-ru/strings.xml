@@ -144,6 +144,8 @@
 </string>
     <string name="ok">ОК</string>
 
+    <string name="search_order_hint">Поиск по номеру заказа</string>
+
 
 
 </resources>

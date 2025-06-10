@@ -144,6 +144,8 @@
 
     <string name="ok">OK</string>
 
+    <string name="search_order_hint">Buscar por número de pedido</string>
+
 
 
 </resources>
