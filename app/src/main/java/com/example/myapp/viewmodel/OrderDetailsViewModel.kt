@@ -1,5 +1,6 @@
 package com.example.myapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapp.data.OrderDTO
@@ -50,9 +51,13 @@ class OrderDetailsViewModel : ViewModel() {
                         val body = response.body()
                         if (body != null) {
                             // Помещаем полученный объект в StateFlow
+                            Log.d("OrderDebug", "Fetched order: ${orderDetails}")
+
                             _orderDetails.value = body
                         } else {
                             // Если сервер вернул пустое тело
+                            Log.d("OrderDebug", "Fetched order: ${orderDetails}")
+
                             _errorMessage.value = "Пустой ответ от сервера"
                         }
                     } else {
@@ -69,4 +74,6 @@ class OrderDetailsViewModel : ViewModel() {
                 }
             })
     }
+
+
 }

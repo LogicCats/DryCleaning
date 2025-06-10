@@ -11,6 +11,7 @@ import com.example.myapp.R
 import com.example.myapp.analytics.AnalyticsManager
 import com.example.myapp.data.OrderDTO
 import com.example.myapp.data.PrefsKeys
+import com.example.myapp.data.PromotionDTO
 import com.example.myapp.network.RetrofitClient
 import com.example.myapp.worker.NotificationWorker
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,17 +49,46 @@ class CreateOrderViewModel(
 
     // Перечисляем цены на доступные услуги (идентификаторы 1,2,3)
     private val servicePrices = mapOf(1 to 500.0, 2 to 400.0, 3 to 300.0)
-    // Процент скидки при верном промокоде
-    private val promoDiscount = 0.10
-    // Набор валидных промокодов
-    private val validPromoCodes = setOf("CLEAN10", "WELCOME10", "SPRING15")
+//    // Процент скидки при верном промокоде
+//    private val promoDiscount = 0.10
+//    // Набор валидных промокодов
+//    private val validPromoCodes = setOf("CLEAN10", "WELCOME10", "SPRING15")
+
+    private val promotions = mutableListOf<PromotionDTO.PromotionResponse>()
+
 
     private val _uiState = MutableStateFlow(CreateOrderUiState())
     val uiState: StateFlow<CreateOrderUiState> = _uiState.asStateFlow()
 
+
+
     init {
+        fetchPromotions()
         recalculateTotal()
     }
+
+    private fun fetchPromotions() {
+        RetrofitClient.apiService.getAllPromotions().enqueue(object : Callback<List<PromotionDTO.PromotionResponse>> {
+            override fun onResponse(
+                call: Call<List<PromotionDTO.PromotionResponse>>,
+                response: Response<List<PromotionDTO.PromotionResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        promotions.clear()
+                        promotions.addAll(it)
+                    }
+                } else {
+                    // Обработка ошибок (например, логгирование)
+                }
+            }
+
+            override fun onFailure(call: Call<List<PromotionDTO.PromotionResponse>>, t: Throwable) {
+                // Обработка ошибок (например, логгирование)
+            }
+        })
+    }
+
 
     // Пересчитывает итоговую сумму с учётом выбранных услуг и скидки (если применена)
     private fun recalculateTotal() {
@@ -68,14 +98,19 @@ class CreateOrderViewModel(
             .keys
             .sumOf { servicePrices[it] ?: 0.0 }
 
-        val finalTotal = if (state.discountApplied) {
-            // Если скидка активна, применяем promoDiscount
-            baseTotal * (1.0 - promoDiscount)
+        val matchedPromo = promotions.firstOrNull {
+            it.code.equals(state.promoCode, ignoreCase = true)
+        }
+
+        val finalTotal = if (state.discountApplied && matchedPromo != null) {
+            baseTotal * (1.0 - (matchedPromo.discountPct / 100.0))
         } else {
             baseTotal
         }
+
         _uiState.update { it.copy(total = finalTotal) }
     }
+
 
     // Переключатель конкретной услуги (по id) — выбран/не выбран
     fun toggleService(serviceId: Int, isSelected: Boolean) {
@@ -118,7 +153,6 @@ class CreateOrderViewModel(
     fun setPromoCode(code: String) {
         val trimmed = code.trim()
         if (trimmed.isEmpty()) {
-            // Если пустая строка — сбрасываем промокод
             _uiState.update {
                 it.copy(
                     promoCode = "",
@@ -127,23 +161,23 @@ class CreateOrderViewModel(
                 )
             }
         } else {
-            val isValid = validPromoCodes.contains(trimmed.uppercase())
-            if (isValid) {
-                // Если промокод корректен, активируем скидку
+            val matchedPromo = promotions.firstOrNull {
+                it.code.equals(trimmed, ignoreCase = true)
+            }
+
+            if (matchedPromo != null) {
                 _uiState.update {
                     it.copy(
-                        promoCode = trimmed.uppercase(),
+                        promoCode = matchedPromo.code,
                         promoErrorMessage = null,
                         discountApplied = true
                     )
                 }
             } else {
-                // Если промокод некорректен — показываем сообщение об ошибке
                 _uiState.update {
                     it.copy(
                         promoCode = trimmed,
-                        promoErrorMessage =
-                        getApplication<Application>().getString(R.string.error_invalid_promo),
+                        promoErrorMessage = getApplication<Application>().getString(R.string.error_invalid_promo),
                         discountApplied = false
                     )
                 }
@@ -151,6 +185,7 @@ class CreateOrderViewModel(
         }
         recalculateTotal()
     }
+
 
     // Сбрасываем введённый промокод
     fun clearPromoCode() {

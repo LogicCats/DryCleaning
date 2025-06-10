@@ -49,6 +49,14 @@ fun PromotionItem(
                 style = MaterialTheme.typography.titleMedium
             )
 
+            // Промокод
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Код: ${promotion.code}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary
+            )
+
             Spacer(modifier = Modifier.height(4.dp))
 
             // Описание (если есть)
@@ -81,7 +89,7 @@ fun PromotionItem(
                 modifier = Modifier.padding(vertical = 2.dp)
             )
 
-            // Период действия (validFrom – validTo), если указаны
+            // Период действия
             val from = promotion.validFrom
             val to = promotion.validTo
             if (from != null && to != null) {

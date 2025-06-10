@@ -1,6 +1,8 @@
 package com.example.myapp.ui.screens
 
 import android.util.Log
+import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,11 +31,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import coil.compose.AsyncImage
+import com.bumptech.glide.Glide
 import com.example.myapp.R
 import com.example.myapp.navigation.Screen
 import com.example.myapp.viewmodel.OrderDetailsViewModel
@@ -112,6 +117,30 @@ private fun LoadingContent() {
 }
 
 @Composable
+fun GlideImage(url: String, modifier: Modifier = Modifier) {
+    AndroidView(
+        factory = { context ->
+            ImageView(context).apply {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            }
+        },
+        update = { imageView ->
+            Glide.with(imageView.context)
+                .load(url)
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.error_image)
+                .into(imageView)
+        },
+        modifier = modifier
+    )
+}
+
+
+@Composable
 private fun ErrorContent(message: String, onRetry: () -> Unit) {
     Log.d("ComposeLog", "ErrorContent recomposed")
     Column(
@@ -135,6 +164,9 @@ private fun ErrorContent(message: String, onRetry: () -> Unit) {
 @Composable
 private fun OrderDetailsContent(order: OrderDTO.OrderDetailsResponse) {
     Log.d("ComposeLog", "OrderDetailsContent recomposed")
+
+    val baseUrl = "http://10.0.2.2:8888"
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -165,6 +197,8 @@ private fun OrderDetailsContent(order: OrderDTO.OrderDetailsResponse) {
         )
         Spacer(modifier = Modifier.height(12.dp))
 
+
+
         if (order.imageUrls.isNotEmpty()) {
             Text(
                 text = stringResource(R.string.details_photos_label),
@@ -172,16 +206,24 @@ private fun OrderDetailsContent(order: OrderDTO.OrderDetailsResponse) {
             )
             Spacer(modifier = Modifier.height(8.dp))
 
-            order.imageUrls.forEach { url: String ->
+            order.imageUrls.forEach { relativeUrl ->
+                val fullUrl = baseUrl.trimEnd('/') + "/" + relativeUrl.trimStart('/')
+
+
+
                 AsyncImage(
-                    model = url,
+                    model = fullUrl,
                     contentDescription = stringResource(R.string.cd_order_photo),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
                         .padding(vertical = 8.dp),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(R.drawable.placeholder), // добавь заглушку
+                    error = painterResource(R.drawable.error_image) // добавь картинку ошибки
+
                 )
+
             }
             Spacer(modifier = Modifier.height(12.dp))
         }
