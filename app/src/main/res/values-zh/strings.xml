@@ -139,4 +139,9 @@
     <string name="btn_save">保存</string>
     <string name="btn_cancel">取消</string>
 
+    <string name="privacy_policy_text">
+我们尊重您的隐私。未经您的同意，本应用不会收集您的个人数据。您可以在设置中禁用分析数据收集和推送通知。
+</string>
+    <string name="ok">OK</string>
+
 </resources>

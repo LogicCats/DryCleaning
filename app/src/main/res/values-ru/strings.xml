@@ -139,5 +139,11 @@
     <string name="btn_save">Сохранить</string>
     <string name="btn_cancel">Отмена</string>
 
+    <string name="privacy_policy_text">
+    Мы уважаем вашу конфиденциальность. Приложение не собирает персональные данные без вашего согласия. Сбор аналитики и push-уведомления можно отключить в настройках.
+</string>
+    <string name="ok">ОК</string>
+
+
 
 </resources>

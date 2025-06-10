@@ -138,6 +138,12 @@
     <string name="btn_save">Guardar</string>
     <string name="btn_cancel">Cancelar</string>
 
+    <string name="privacy_policy_text">
+    Respetamos su privacidad. La aplicación no recopila datos personales sin su consentimiento. Puede desactivar la recopilación de datos analíticos y las notificaciones push en la configuración.
+    </string>
+
+    <string name="ok">OK</string>
+
 
 
 </resources>

@@ -139,5 +139,10 @@
     <string name="btn_save">Save</string>
     <string name="btn_cancel">Cancel</string>
 
+    <string name="privacy_policy_text">
+We respect your privacy. The application does not collect personal data without your consent. Analytics collection and push notifications can be disabled in the settings.
+</string>
+    <string name="ok">ОК</string>
+
 
 </resources>

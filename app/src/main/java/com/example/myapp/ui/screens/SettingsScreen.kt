@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -83,6 +84,10 @@ fun SettingsScreen(
     var analyticsEnabled by remember {
         mutableStateOf(prefs.getBoolean(PrefsKeys.KEY_ANALYTICS_ENABLED, false))
     }
+
+    // Состояние показа диалога
+    var showPrivacyPolicyDialog by remember { mutableStateOf(false) }
+
 
     Scaffold(
         topBar = {
@@ -206,9 +211,33 @@ fun SettingsScreen(
             Spacer(Modifier.height(4.dp))
             Text(stringResource(R.string.version, "1.0.0"))
             Spacer(Modifier.height(8.dp))
-            TextButton(onClick = { /* TODO: открыть Privacy Policy */ }) {
+            TextButton(onClick = {
+                showPrivacyPolicyDialog = true
+            }) {
                 Text(stringResource(R.string.privacy_policy))
             }
+
+            if (showPrivacyPolicyDialog) {
+                AlertDialog(
+                    onDismissRequest = { showPrivacyPolicyDialog = false },
+                    confirmButton = {
+                        TextButton(onClick = { showPrivacyPolicyDialog = false }) {
+                            Text(stringResource(R.string.ok))
+                        }
+                    },
+                    title = {
+                        Text(stringResource(R.string.privacy_policy))
+                    },
+                    text = {
+                        Text(
+                            // Пример текста политики. Лучше хранить в strings.xml.
+                            stringResource(R.string.privacy_policy_text)
+                        )
+                    }
+                )
+            }
+
+
         }
     }
 }
