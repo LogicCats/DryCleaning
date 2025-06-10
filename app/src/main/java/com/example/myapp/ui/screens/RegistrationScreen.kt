@@ -1,10 +1,16 @@
 package com.example.myapp.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,26 +19,29 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
 import com.example.myapp.R
 import com.example.myapp.viewmodel.AuthViewModel
+import androidx.compose.runtime.collectAsState
+
 
 @Composable
 fun RegistrationScreen(
-    authViewModel: AuthViewModel,
+    authViewModel: AuthViewModel,      // Экземпляр ViewModel передаём сверху
     onRegisterSuccess: () -> Unit,
     onBack: () -> Unit
 ) {
-    // Local UI state
-    var passwordVisible by remember { mutableStateOf(false) }
+    Log.d("ComposeLog", "RegistrationScreen recomposed")
+    // 1. Собираем StateFlow из ViewModel, указывая начальное значение ""
+    val nameState        by authViewModel.name.collectAsState(initial = "")
+    val phoneState       by authViewModel.phone.collectAsState(initial = "")
+    val emailState       by authViewModel.email.collectAsState(initial = "")
+    val passwordState    by authViewModel.password.collectAsState(initial = "")
+    val errorState       by authViewModel.errorMessage.collectAsState(initial = "")
+
+    // 2. Локальный UI‐стейт для видимости пароля и поля "подтвердите пароль"
+    var passwordVisible        by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember { mutableStateOf(false) }
-    var confirmPassword by remember { mutableStateOf("") }
+    var confirmPassword        by remember { mutableStateOf("") }
 
-    // ViewModel state
-    val name by authViewModel.name
-    val phone by authViewModel.phone
-    val email by authViewModel.email
-    val password by authViewModel.password
-    val errorMessage by authViewModel.errorMessage
-
-    // Preload string resources
+    // 3. Загружаем строковые ресурсы из strings.xml
     val titleText         = stringResource(R.string.registration_title)
     val labelName         = stringResource(R.string.label_name)
     val labelPhone        = stringResource(R.string.label_phone)
@@ -56,13 +65,18 @@ fun RegistrationScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = titleText, style = MaterialTheme.typography.headlineMedium)
+        // Заголовок экрана
+        Text(
+            text = titleText,
+            style = MaterialTheme.typography.headlineMedium
+        )
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
+        // Поле "Имя"
         OutlinedTextField(
-            value = name,
-            onValueChange = { authViewModel.name.value = it },
+            value = nameState,
+            onValueChange = { authViewModel.onNameChanged(it) },
             label = { Text(labelName) },
             leadingIcon = {
                 Icon(Icons.Default.Person, contentDescription = cdName)
@@ -71,11 +85,12 @@ fun RegistrationScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
+        // Поле "Телефон"
         OutlinedTextField(
-            value = phone,
-            onValueChange = { authViewModel.phone.value = it },
+            value = phoneState,
+            onValueChange = { authViewModel.onPhoneChanged(it) },
             label = { Text(labelPhone) },
             leadingIcon = {
                 Icon(Icons.Default.Phone, contentDescription = cdPhone)
@@ -85,11 +100,12 @@ fun RegistrationScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
+        // Поле "Email"
         OutlinedTextField(
-            value = email,
-            onValueChange = { authViewModel.email.value = it },
+            value = emailState,
+            onValueChange = { authViewModel.onEmailChanged(it) },
             label = { Text(labelEmail) },
             leadingIcon = {
                 Icon(Icons.Default.Email, contentDescription = cdEmail)
@@ -99,11 +115,12 @@ fun RegistrationScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
+        // Поле "Пароль"
         OutlinedTextField(
-            value = password,
-            onValueChange = { authViewModel.password.value = it },
+            value = passwordState,
+            onValueChange = { authViewModel.onPasswordChanged(it) },
             label = { Text(labelPassword) },
             leadingIcon = {
                 Icon(Icons.Default.Lock, contentDescription = cdPassword)
@@ -117,14 +134,17 @@ fun RegistrationScreen(
                     )
                 }
             },
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation =
+            if (passwordVisible) VisualTransformation.None
+            else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
+        // Поле "Подтвердите пароль"
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
@@ -133,53 +153,64 @@ fun RegistrationScreen(
                 Icon(Icons.Default.Lock, contentDescription = cdConfirmPass)
             },
             trailingIcon = {
-                val desc = if (confirmPasswordVisible) cdHidePassword else cdShowPassword
+                val desc2 = if (confirmPasswordVisible) cdHidePassword else cdShowPassword
                 IconButton(onClick = { confirmPasswordVisible = !confirmPasswordVisible }) {
                     Icon(
                         imageVector = if (confirmPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                        contentDescription = desc
+                        contentDescription = desc2
                     )
                 }
             },
-            visualTransformation = if (confirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            visualTransformation =
+            if (confirmPasswordVisible) VisualTransformation.None
+            else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
 
-        if (errorMessage.isNotBlank()) {
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Выводим сообщение об ошибке, если оно не пустое
+        if (errorState.isNotBlank()) {
             Text(
-                text = errorMessage,
+                text = errorState,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(vertical = 8.dp)
             )
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
+        // Кнопка "Зарегистрироваться"
         Button(
             onClick = {
-                if (password != confirmPassword) {
-                    authViewModel.errorMessage.value = errorMismatch
+                // Проверяем: совпадают ли пароли?
+                if (passwordState != confirmPassword) {
+                    authViewModel.setErrorMessage(errorMismatch) // Исправлено: вызываем метод, а не пытаемся переприсвоить val
                     return@Button
                 }
+                // Если пароли совпадают, запускаем сетевой вызов регистрации
                 authViewModel.register { success ->
-                    if (success) onRegisterSuccess()
+                    if (success) {
+                        onRegisterSuccess()
+                    }
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(btnRegisterText)
+            Text(text = btnRegisterText)
         }
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
+        // Кнопка "Назад"
         TextButton(
             onClick = onBack,
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text(btnBackText)
+            Text(text = btnBackText)
         }
     }
 }

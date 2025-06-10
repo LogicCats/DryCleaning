@@ -1,5 +1,6 @@
 package com.example.myapp.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -36,6 +37,7 @@ fun AppNavHost(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
+    Log.d("ComposeLog", "AppNavHost recomposed")
     val authViewModel: AuthViewModel = viewModel()
 
     NavHost(

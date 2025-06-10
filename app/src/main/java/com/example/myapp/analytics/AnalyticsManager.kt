@@ -1,6 +1,5 @@
 package com.example.myapp.analytics
 
-
 import android.content.Context
 import android.util.Log
 import com.example.myapp.data.PrefsKeys
@@ -14,8 +13,9 @@ import java.time.format.DateTimeFormatter
 
 /**
  * AnalyticsManager — singleton, который пишет события в локальный файл analytics.log.
- * Если флаг в SharedPreferences (KEY_ANALYTICS_ENABLED) = true, то записывает,
- * иначе игнорирует все вызовы logEvent(...).
+ * Если флаг в SharedPreferences (KEY_ANALYTICS_ENABLED) = true, то записывает, иначе игнорирует.
+ *
+ * Для корректной работы необходимо вызвать AnalyticsManager.init(context) один раз, например, в MainActivity.
  */
 object AnalyticsManager {
 
@@ -26,12 +26,13 @@ object AnalyticsManager {
     private lateinit var appContext: Context
 
     /**
-     * Инициализация должна быть вызвана один раз из MainActivity (или другого места),
-     * чтобы задать контекст и путь к файлу.
+     * Инициализация должна быть вызвана один раз из MainActivity (или Application), чтобы задать контекст и путь.
      */
     fun init(context: Context) {
         if (initialized) return
         appContext = context.applicationContext
+
+        // Файл будет находится в internal storage: /data/data/<package>/files/analytics.log
         analyticsFile = File(appContext.filesDir, FILE_NAME)
         if (!analyticsFile.exists()) {
             try {
@@ -44,7 +45,7 @@ object AnalyticsManager {
     }
 
     /**
-     * Проверяет в SharedPreferences, включена ли аналитика.
+     * Проверяет SharedPreferences, включена ли аналитика.
      */
     private fun isAnalyticsEnabled(): Boolean {
         val prefs = appContext.getSharedPreferences(PrefsKeys.PREFS_NAME, Context.MODE_PRIVATE)
@@ -52,7 +53,7 @@ object AnalyticsManager {
     }
 
     /**
-     * Записывает одно событие: timestamp, eventType, details
+     * Записывает одно событие в файл: timestamp | eventType | details (если есть).
      *
      * Пример строки:
      * 2025-05-31T20:17:00 | order_created | orderId=abc123
@@ -78,7 +79,7 @@ object AnalyticsManager {
             }
         }
 
-        // Запись в файл в фоновом потоке (корутиной)
+        // Запись в файл в фоновом потоке
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 FileWriter(analyticsFile, /* append = */ true).use { writer ->

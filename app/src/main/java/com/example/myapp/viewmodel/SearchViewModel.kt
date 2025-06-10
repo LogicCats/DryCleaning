@@ -1,18 +1,21 @@
 package com.example.myapp.viewmodel
 
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.myapp.data.Order
-import com.example.myapp.data.OrderRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import com.example.myapp.data.OrderDTO
+import com.example.myapp.network.RetrofitClient
+import com.example.myapp.util.AnalyticsManager
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import com.example.myapp.analytics.AnalyticsManager
+import kotlinx.coroutines.flow.asStateFlow
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
+/**
+ * ViewModel для экрана поиска заказов.
+ * Теперь всё состояние — StateFlow, чтобы Compose мог использовать collectAsState().
+ */
 class SearchViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -20,79 +23,127 @@ class SearchViewModel(
     companion object {
         private const val QUERY_KEY = "query"
         private const val MAX_HISTORY_SIZE = 10
+
+        // Будем запрашивать с нулевой страницы, размер страницы возьмём, например, 100 заказов
+        private const val PAGE_NUMBER = 0
+        private const val PAGE_SIZE = 100
     }
 
+    /** Текущий текст в строке поиска. */
     val query: StateFlow<String> = savedStateHandle.getStateFlow(QUERY_KEY, "")
-    val isLoading = mutableStateOf(false)
-    val error = mutableStateOf<String?>(null)
-    val results = mutableStateListOf<Order>()
-    val history = mutableStateListOf<String>()
+
+    /** Индикатор загрузки данных из сети. */
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    /** Сообщение об ошибке, если сеть вернула ошибку. */
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+
+    /**
+     * Список результатов поиска: OrderSummaryResponse, получаем из бэкенда.
+     */
+    private val _results = MutableStateFlow<List<OrderDTO.OrderSummaryResponse>>(emptyList())
+    val results: StateFlow<List<OrderDTO.OrderSummaryResponse>> = _results.asStateFlow()
+
+    /**
+     * История последних запросов (максимум 10). Отображается, когда строка поиска пуста.
+     */
+    private val _history = MutableStateFlow<List<String>>(emptyList())
+    val history: StateFlow<List<String>> = _history.asStateFlow()
 
     init {
-        // Инициализируем результаты
-        results.clear()
-        results.addAll(OrderRepository.getAll())
+        // При инициализации сразу делаем пустой поиск (загрузим все заказы)
         performSearch()
     }
 
+    /** Меняем текст поискового запроса и сохраняем его в SavedStateHandle. */
     fun onQueryChange(newQuery: String) {
         savedStateHandle[QUERY_KEY] = newQuery
     }
 
+    /** Очищаем строку поиска, сбрасываем ошибки и показываем все заказы (первоначальный запрос). */
     fun clearQuery() {
         savedStateHandle[QUERY_KEY] = ""
-        error.value = null
-        results.clear()
-        results.addAll(OrderRepository.getAll())
+        _errorMessage.value = null
+        _results.value = emptyList()
+        performSearch()
     }
 
-    fun performSearch() {
-        val q = query.value.trim()
-        isLoading.value = true
-        error.value = null
+    /**
+     * Добавляем термин в историю (максимум 10 последних уникальных запросов).
+     */
+    private fun addToHistory(term: String) {
+        if (term.isBlank()) return
 
-        viewModelScope.launch(Dispatchers.Main) {
-            delay(200) // эмуляция задержки
+        val currentList = _history.value.toMutableList()
+        // Если уже был в истории, убираем, чтобы потом заново добавить в начало
+        currentList.remove(term)
+        currentList.add(0, term)
 
-            try {
-                val allOrders = OrderRepository.getAll()
-                val filtered = if (q.isEmpty()) {
-                    allOrders
-                } else {
-                    allOrders.filter { it.id.contains(q, ignoreCase = true) }
-                }
-
-                results.clear()
-                results.addAll(filtered)
-
-                if (q.isNotEmpty()) {
-                    history.remove(q)
-                    history.add(0, q)
-                    if (history.size > MAX_HISTORY_SIZE) {
-                        history.removeAt(history.size - 1)
-                    }
-                }
-
-                // Логируем факт выполнения поиска (или пустого запроса, чтобы тоже учесть)
-                AnalyticsManager.logEvent(
-                    "search_performed",
-                    "query=$q, results_count=${filtered.size}"
-                )
-            } catch (e: Exception) {
-                error.value = e.message ?: "Unknown error"
-                AnalyticsManager.logEvent("search_failed", "query=$q,error=${e.message}")
-            } finally {
-                isLoading.value = false
-            }
+        if (currentList.size > MAX_HISTORY_SIZE) {
+            // Убираем последний элемент по индексу, чтобы не использовать removeLast()
+            currentList.removeAt(currentList.size - 1)
         }
+
+        _history.value = currentList
     }
 
+    /** Очищает всю историю запросов. */
     fun clearHistory() {
-        history.clear()
+        _history.value = emptyList()
         AnalyticsManager.logEvent("history_cleared", "")
     }
 
-    fun retry() {
-        performSearch()
+    /**
+     * Запускает поиск:
+     * 1) Берём текущее значение query.
+     * 2) Делаем Retrofit‐вызов searchOrders(query, PAGE_NUMBER, PAGE_SIZE).
+     * 3) В onResponse заполняем список _results и историю.
+     * 4) В onFailure пишем в _errorMessage.
+     */
+    fun performSearch() {
+        val q = query.value.trim()
+        _isLoading.value = true
+        _errorMessage.value = null
+
+        RetrofitClient.apiService
+            .searchOrders(q, PAGE_NUMBER, PAGE_SIZE)
+            .enqueue(object : Callback<OrderDTO.PageResponse<OrderDTO.OrderSummaryResponse>> {
+                override fun onResponse(
+                    call: Call<OrderDTO.PageResponse<OrderDTO.OrderSummaryResponse>>,
+                    response: Response<OrderDTO.PageResponse<OrderDTO.OrderSummaryResponse>>
+                ) {
+                    if (response.isSuccessful) {
+                        val body = response.body()
+                        val contentList = body?.content ?: emptyList()
+                        _results.value = contentList
+
+                        if (q.isNotEmpty()) {
+                            addToHistory(q)
+                        }
+
+                        AnalyticsManager.logEvent(
+                            "search_performed",
+                            "query=$q, results_count=${contentList.size}"
+                        )
+                    } else {
+                        val serverMsg = response.errorBody()?.string() ?: "Unknown server error"
+                        _errorMessage.value = "Ошибка сервера: $serverMsg"
+                        AnalyticsManager.logEvent("search_failed", "query=$q, error=$serverMsg")
+                    }
+                    _isLoading.value = false
+                }
+
+                override fun onFailure(
+                    call: Call<OrderDTO.PageResponse<OrderDTO.OrderSummaryResponse>>,
+                    t: Throwable
+                ) {
+                    val networkMsg = t.localizedMessage ?: "Network error"
+                    _errorMessage.value = "Сетевая ошибка: $networkMsg"
+                    AnalyticsManager.logEvent("search_failed", "query=$q, exception=$networkMsg")
+                    _isLoading.value = false
+                }
+            })
     }
 }

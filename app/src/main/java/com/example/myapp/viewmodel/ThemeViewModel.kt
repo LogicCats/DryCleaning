@@ -9,13 +9,23 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel для хранения и переключения темы приложения.
+ * Тема сохраняется в ThemeRepository (работа с SharedPreferences).
+ */
+class ThemeViewModel(application: Application) : AndroidViewModel(application) {
+    private val repo = ThemeRepository(application)
 
-class ThemeViewModel(app: Application) : AndroidViewModel(app) {
-    private val repo = ThemeRepository(app)
-
+    /**
+     * Текущий выбранный вариант темы: SYSTEM / LIGHT / DARK.
+     * По умолчанию — ThemeOption.SYSTEM.
+     */
     val themeOption = repo.themeOptionFlow
-        .stateIn(viewModelScope, kotlinx.coroutines.flow.SharingStarted.Eagerly, ThemeOption.SYSTEM)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, ThemeOption.SYSTEM)
 
+    /**
+     * Сохраняем новый вариант темы в репозитории.
+     */
     fun setTheme(option: ThemeOption) {
         viewModelScope.launch {
             repo.setThemeOption(option)

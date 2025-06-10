@@ -123,4 +123,17 @@
     <string name="notification_title">Recordatorio de próximo pedido</string>
     <string name="notification_text">Tiene un pedido programado. ID del pedido: %1$s</string>
 
+    <string name="loading_profile">Cargando perfil…</string>
+    <string name="btn_edit_profile">Editar perfil</string>
+
+    <string name="loading_orders">Cargando pedidos...</string>
+    <string name="no_orders">No se encontraron pedidos</string>
+
+    <string name="loading_details">Cargando detalles del pedido...</string>
+    <string name="details_photos_label">Fotos:</string>
+
+    <string name="loading_promotions">Cargando promociones...</string>
+
+
+
 </resources>

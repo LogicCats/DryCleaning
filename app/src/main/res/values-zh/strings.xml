@@ -124,4 +124,15 @@
     <string name="notification_title">即将下单的订单提醒</string>
     <string name="notification_text">您现在有一个已安排的订单。订单 ID：%1$s</string>
 
+    <string name="loading_profile">正在加载个人资料…</string>
+    <string name="btn_edit_profile">编辑个人资料</string>
+
+    <string name="loading_orders">正在加载订单…</string>
+    <string name="no_orders">未找到订单</string>
+
+    <string name="loading_details">正在加载订单详情...</string>
+    <string name="details_photos_label">照片：</string>
+
+    <string name="loading_promotions">正在加载优惠活动…</string>
+
 </resources>

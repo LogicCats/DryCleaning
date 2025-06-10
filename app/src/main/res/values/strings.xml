@@ -124,5 +124,16 @@
     <string name="notification_title">Upcoming Order Reminder</string>
     <string name="notification_text">You have an order scheduled now. Order ID: %1$s</string>
 
+    <string name="loading_profile">Loading profile…</string>
+    <string name="btn_edit_profile">Edit Profile</string>
+
+    <string name="loading_orders">Loading orders...</string>
+    <string name="no_orders">No orders found</string>
+
+    <string name="loading_details">Loading order details...</string>
+    <string name="details_photos_label">Photos:</string>
+
+    <string name="loading_promotions">Loading promotions...</string>
+
 
 </resources>

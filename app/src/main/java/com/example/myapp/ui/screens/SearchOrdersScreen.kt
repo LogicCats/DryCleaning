@@ -1,6 +1,6 @@
 package com.example.myapp.ui.screens
 
-
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,37 +30,42 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapp.R
-import com.example.myapp.data.Order
+import com.example.myapp.data.OrderDTO
 import com.example.myapp.viewmodel.SearchViewModel
 
-
-
 /**
- * @param onOrderClick Коллбэк, вызываемый при клике на любую строку результата — передаётся ID заказа.
+ * Экран поиска заказов.
+ * Подключается к SearchViewModel и отображает:
+ *  1) Поле ввода запроса
+ *  2) Историю запросов (если поле пустое)
+ *  3) Индикатор загрузки / Ошибку / Список результатов
+ *
+ * @param viewModel – создаётся автоматически через viewModel()
+ * @param onOrderClick – коллбэк, вызываемый при тапе по любому элементу списка; передаём сюда ID заказа.
  */
 @Composable
 fun SearchOrdersScreen(
     viewModel: SearchViewModel = viewModel(),
     onOrderClick: (String) -> Unit
 ) {
+
+    Log.d("ComposeLog", "SearchOrdersScreen recomposed")
     val focusManager = LocalFocusManager.current
 
-    // Состояния из ViewModel
+    // Собираем состояния из ViewModel
     val query by viewModel.query.collectAsState()
-    val isLoading = viewModel.isLoading.value
-    val errorMessage = viewModel.error.value
-    val results = viewModel.results
-    val history = viewModel.history
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+    val results by viewModel.results.collectAsState()
+    val history by viewModel.history.collectAsState()
 
     Column(
         modifier = Modifier
@@ -171,7 +176,7 @@ fun SearchOrdersScreen(
             }
 
             // 3) Нет результатов → placeholder + Retry
-            results.isEmpty() -> {
+            !isLoading && results.isEmpty() -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -192,38 +197,37 @@ fun SearchOrdersScreen(
                 }
             }
 
-            // 4) Список результатов: при клике сразу переходим на детали
+            // 4) Список результатов: при клике переходим в детали
             else -> {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    items(results) { order: Order ->
+                    items(results) { orderSummary: OrderDTO.OrderSummaryResponse ->
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    // Вызываем callback с ID заказа
-                                    onOrderClick(order.id)
+                                    onOrderClick(orderSummary.id)
                                 }
                                 .padding(vertical = 8.dp)
                         ) {
                             Text(
-                                text = stringResource(R.string.text_order_id, order.id),
+                                text = stringResource(R.string.text_order_id, orderSummary.id),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = stringResource(R.string.text_order_date, order.createdAt),
+                                text = stringResource(R.string.text_order_date, orderSummary.createdAt),
                                 style = MaterialTheme.typography.bodySmall
                             )
                             Text(
                                 text = stringResource(
                                     R.string.text_order_total,
-                                    "%,.2f".format(order.total)
+                                    "%,.2f".format(orderSummary.totalAmount)
                                 ),
                                 style = MaterialTheme.typography.bodySmall
                             )
                             Spacer(modifier = Modifier.height(4.dp))
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                 }

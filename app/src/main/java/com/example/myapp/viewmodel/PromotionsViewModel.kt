@@ -1,36 +1,76 @@
 package com.example.myapp.viewmodel
 
-
 import androidx.lifecycle.ViewModel
-import com.example.myapp.data.Promotion
+import com.example.myapp.data.PromotionDTO
+import com.example.myapp.network.RetrofitClient
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 /**
- * ViewModel, который содержит список текущих акций.
- * В данном примере мы просто храним статический список, но при желании
- * можно подтягивать их с сервера, из базы данных и т.п.
+ * ViewModel, который получает список текущих акций с сервера.
+ * Он хранит:
+ *  - isLoading: флаг загрузки,
+ *  - errorMessage: текст ошибки,
+ *  - promotions: список акций (PromotionDTO.PromotionResponse).
  */
 class PromotionsViewModel : ViewModel() {
 
+    // Флаг загрузки — true, когда идёт сетевой запрос
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    // Сообщение об ошибке — непустая строка при ошибке
+    private val _errorMessage = MutableStateFlow("")
+    val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
+
+    // Список акций, полученный с сервера
+    private val _promotions = MutableStateFlow<List<PromotionDTO.PromotionResponse>>(emptyList())
+    val promotions: StateFlow<List<PromotionDTO.PromotionResponse>> = _promotions.asStateFlow()
+
+    init {
+        // При создании ViewModel сразу запрашиваем акции
+        fetchPromotions()
+    }
+
     /**
-     * Список текущих акций. В реальной апликухе сюда может прийти запрос
-     * к API или чтение из локального репозитория.
+     * Выполняет сетевой запрос для получения всех активных акций.
+     * С помощью ApiService.getAllPromotions().
      */
-    val promotions: List<Promotion> = listOf(
-        Promotion(
-            title = "Скидка 10% на первое обращение",
-            description = "При использовании промокода получите 10% скидки на любую услугу.",
-            promoCode = "WELCOME10"
-        ),
-        Promotion(
-            title = "Весенняя акция 15%",
-            description = "Скидка 15% на химчистку пальто и костюмов.",
-            promoCode = "SPRING15"
-        ),
-        Promotion(
-            title = "Праздничная скидка 20%",
-            description = "В честь праздника — 20% скидки на все услуги.",
-            promoCode = "HOLIDAY20"
-        )
-        // При необходимости добавьте ещё акции сюда
-    )
+    fun fetchPromotions() {
+        _isLoading.value = true
+        _errorMessage.value = ""
+        _promotions.value = emptyList()
+
+        RetrofitClient.apiService.getAllPromotions()
+            .enqueue(object : Callback<List<PromotionDTO.PromotionResponse>> {
+                override fun onResponse(
+                    call: Call<List<PromotionDTO.PromotionResponse>>,
+                    response: Response<List<PromotionDTO.PromotionResponse>>
+                ) {
+                    _isLoading.value = false
+
+                    if (response.isSuccessful) {
+                        val body = response.body()
+                        if (body != null) {
+                            _promotions.value = body
+                        } else {
+                            _errorMessage.value = "Сервер вернул пустой список акций"
+                        }
+                    } else {
+                        // Если HTTP-код ≠ 2xx
+                        val serverMsg = response.errorBody()?.string() ?: "Не удалось получить акции"
+                        _errorMessage.value = "Ошибка сервера: $serverMsg"
+                    }
+                }
+
+                override fun onFailure(call: Call<List<PromotionDTO.PromotionResponse>>, t: Throwable) {
+                    _isLoading.value = false
+                    _errorMessage.value = "Сетевая ошибка: ${t.localizedMessage}"
+                }
+            })
+    }
 }

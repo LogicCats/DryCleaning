@@ -124,4 +124,16 @@
     <string name="notification_title">Напоминание о предстоящем заказе</string>
     <string name="notification_text">У вас сейчас запланирован заказ. Идентификатор заказа: %1$s</string>
 
+    <string name="loading_profile">Загрузка профиля…</string>
+    <string name="btn_edit_profile">Редактировать профиль</string>
+
+    <string name="loading_orders">Загрузка списка заказов...</string>
+    <string name="no_orders">Заказы не найдены</string>
+
+    <string name="loading_details">Загрузка деталей заказа...</string>
+    <string name="details_photos_label">Фотографии:</string>
+
+    <string name="loading_promotions">Загрузка акций...</string>
+
+
 </resources>
